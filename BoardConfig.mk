@@ -260,7 +260,7 @@ WPA_SUPPLICANT_VERSION := VER_0_8_X
 BOARD_USES_QCOM_HARDWARE := true
 TARGET_USE_SDCLANG := true
 
-# Dex
+# Preopt
 ifeq ($(HOST_OS),linux)
   ifneq ($(TARGET_BUILD_VARIANT),eng)
     ifeq ($(WITH_DEXPREOPT),)
@@ -269,7 +269,6 @@ ifeq ($(HOST_OS),linux)
     endif
   endif
 endif
-PRODUCT_DEXPREOPT_SPEED_APPS += SystemUI
 
 # Inherit from the proprietary version
 -include vendor/xiaomi/lavender/BoardConfigVendor.mk
