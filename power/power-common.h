@@ -39,6 +39,7 @@
 #define MSMDCVS_GOVERNOR "msm-dcvs"
 #define SCHEDUTIL_GOVERNOR "schedutil"
 
+#define CHECK_HANDLE(x) ((x)>0)
 #define HINT_HANDLED (0)
 #define HINT_NONE (-1)
 
