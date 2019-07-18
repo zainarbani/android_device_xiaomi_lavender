@@ -277,3 +277,4 @@ PRODUCT_DEXPREOPT_SPEED_APPS += SystemUI
 
 # Inherit from the proprietary version
 -include vendor/xiaomi/lavender/BoardConfigVendor.mk
+-include vendor/xiaomi/sdm660-common/BoardConfigVendor.mk

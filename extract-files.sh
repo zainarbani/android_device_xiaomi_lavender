@@ -17,61 +17,48 @@
 
 set -e
 
-DEVICE=lavender
-VENDOR=xiaomi
+INITIAL_COPYRIGHT_YEAR=2019
+
+# Required!
+export DEVICE=lavender
+export DEVICE_COMMON=sdm660-common
+export VENDOR=xiaomi
 
 # Load extract_utils and do some sanity checks
 MY_DIR="${BASH_SOURCE%/*}"
-if [[ ! -d "${MY_DIR}" ]]; then MY_DIR="${PWD}"; fi
+if [[ ! -d "$MY_DIR" ]]; then MY_DIR="$PWD"; fi
 
-LINEAGE_ROOT="${MY_DIR}"/../../..
+LINEAGE_ROOT="$MY_DIR"/../../..
 
-HELPER="${LINEAGE_ROOT}/vendor/aosp/build/tools/extract_utils.sh"
-if [ ! -f "${HELPER}" ]; then
-    echo "Unable to find helper script at ${HELPER}"
+HELPER="$LINEAGE_ROOT"/vendor/lineage/build/tools/extract_utils.sh
+if [ ! -f "$HELPER" ]; then
+    echo "Unable to find helper script at $HELPER"
     exit 1
 fi
-source "${HELPER}"
-
-# Default to sanitizing the vendor folder before extraction
-CLEAN_VENDOR=true
-
-SECTION=
-KANG=
-
-while [ "${#}" -gt 0 ]; do
-    case "${1}" in
-        -n | --no-cleanup )
-                CLEAN_VENDOR=false
-                ;;
-        -k | --kang )
-                KANG="--kang"
-                ;;
-        -s | --section )
-                SECTION="${2}"; shift
-                CLEAN_VENDOR=false
-                ;;
-        * )
-                SRC="${1}"
-                ;;
-    esac
-    shift
-done
-
-if [ -z "${SRC}" ]; then
-    SRC="adb"
-fi
+. "$HELPER"
 
 # Initialize the helper
-setup_vendor "${DEVICE}" "${VENDOR}" "${LINEAGE_ROOT}" false "${CLEAN_VENDOR}"
+setup_vendor "$DEVICE_COMMON" "$VENDOR" "$LINEAGE_ROOT" true
 
-extract "${MY_DIR}/proprietary-files.txt" "${SRC}" \
-        "${KANG}" --section "${SECTION}"
+# Copyright headers and guards
+write_headers "lavender"
 
-BLOB_ROOT="${LINEAGE_ROOT}/vendor/${VENDOR}/${DEVICE}/proprietary"
+# The standard common blobs
+write_makefiles "$MY_DIR"/proprietary-files-qcom.txt true
 
-patchelf --remove-needed "vendor.xiaomi.hardware.mtdservice@1.0.so" "${BLOB_ROOT}/vendor/bin/mlipayd@1.1"
-patchelf --remove-needed "vendor.xiaomi.hardware.mtdservice@1.0.so" "${BLOB_ROOT}/vendor/lib64/libmlipay.so"
-patchelf --remove-needed "vendor.xiaomi.hardware.mtdservice@1.0.so" "${BLOB_ROOT}/vendor/lib64/libmlipay@1.1.so"
+# We are done!
+write_footers
 
-"${MY_DIR}/setup-makefiles.sh"
+if [ -s "$MY_DIR"/proprietary-files.txt ]; then
+    # Reinitialize the helper for device
+    setup_vendor "$DEVICE" "$VENDOR" "$LINEAGE_ROOT" false
+
+    # Copyright headers and guards
+    write_headers
+
+    # The standard device blobs
+    write_makefiles "$MY_DIR"/proprietary-files.txt true
+
+    # We are done!
+    write_footers
+fi
