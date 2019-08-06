@@ -83,8 +83,6 @@ on post-fs-data
 
 on boot
     chown system system /sys/class/touch/touch_dev/palm_sensor
-    start rmt_storage
-    start rfs_access
     write /dev/cpuset/top-app/cpus 0-7
     write /dev/cpuset/audio-app/cpus 1-2
     write /dev/cpuset/foreground/cpus 0-6

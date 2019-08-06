@@ -329,7 +329,6 @@ PRODUCT_PACKAGES += \
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    init.class_main.sh \
     init.goodix.sh \
     init.qcom.early_boot.sh \
     init.qcom.post_boot.sh \
