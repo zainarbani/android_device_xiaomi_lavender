@@ -18,6 +18,10 @@
 $(call inherit-product-if-exists, vendor/xiaomi/lavender/lavender-vendor.mk)
 $(call inherit-product-if-exists, vendor/xiaomi/sdm660-common/sdm660-common-vendor.mk)
 
+# Soong namespaces
+PRODUCT_SOONG_NAMESPACES += \
+    $(LOCAL_PATH)
+
 # Vendor properties
 -include $(LOCAL_PATH)/vendor_prop.mk
 
