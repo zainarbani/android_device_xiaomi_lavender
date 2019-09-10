@@ -1,0 +1,19 @@
+//
+// Copyright (C) 2017-2018 The LineageOS Project
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+
+java_library {
+    name: "org.ifaa.android.manager",
+    installable: true,
+
+    aidl: {
+        local_include_dirs: ["src/org"],
+    },
+    srcs: [
+        "src/org/**/*.java",
+        "src/org/**/I*.aidl",
+    ],
+
+}
