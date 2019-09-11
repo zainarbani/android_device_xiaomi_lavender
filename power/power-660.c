@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2019, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2017, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -124,8 +124,10 @@ static void process_interaction_hint(void *data)
     perf_hint_enable_with_type(VENDOR_HINT_SCROLL_BOOST, duration, SCROLL_VERTICAL);
 }
 
-int  power_hint_override(power_hint_t hint, void *data)
+int  power_hint_override(struct power_module *module, power_hint_t hint,
+        void *data)
 {
+
     switch(hint) {
         case POWER_HINT_VSYNC:
             break;
@@ -147,7 +149,7 @@ int  power_hint_override(power_hint_t hint, void *data)
     return HINT_NONE;
 }
 
-int  set_interactive_override(int on)
+int  set_interactive_override(struct power_module *module, int on)
 {
     char governor[80];
     char tmp_str[NODE_MAX];
